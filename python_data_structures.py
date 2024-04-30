@@ -76,19 +76,20 @@ class LinkedList:
     def insert(self, value, index):
         # Note that this method doesn't insert a node in the last position, use append for this usecase
         node_to_insert = Node(value)
+
+        if index >= self.length:
+            raise IndexError("Index out of range")
+        if index == 0:
+            node_to_insert.next = self.head
+            self.head = node_to_insert
+            self.length += 1
+            return True
+
         i = 1
         current_node = self.head.next
         prev_node = self.head
 
         while (i < self.length):
-            if index >= self.length:
-                raise IndexError("Index out of range")
-            if index == 0:
-                node_to_insert.next = self.head
-                self.head = node_to_insert
-                self.length += 1
-                return True
-
             if i == index:
                 prev_node.next = node_to_insert
                 node_to_insert.next = current_node
@@ -98,6 +99,28 @@ class LinkedList:
             current_node = current_node.next
             prev_node = temp
             i += 1
+
+    def delete(self, index):
+        if index > self.length:
+            raise IndexError("Index out of range")
+        if index == 0:
+            self.head = self.head.next
+            self.length -= 1
+
+        current_node = self.head.next
+        prev_node = self.head
+        i = 1
+
+        while (i < self.length):
+            if i == index:
+                prev_node.next = current_node.next
+                self.length -= 1
+                return True
+            else:
+                temp = current_node
+                current_node = current_node.next
+                prev_node = temp
+                i += 1
 
 
 # Sandbox
@@ -114,8 +137,8 @@ myLinkedList.append(6)
 myLinkedList.insert(55, 5)
 
 # Test delete
-
-# myLinkedList.delete(1)
+# myLinkedList.delete(0)
+myLinkedList.delete(5)
 # Test pop
 # print(myLinkedList.pop().value)
 
