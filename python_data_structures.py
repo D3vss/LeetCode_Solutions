@@ -1,6 +1,6 @@
 # Linked Lists
 """
-- What are LinkedLists? 
+- What are LinkedLists?
   Instead of having all the elements of a list be ordered in memory, //
   a linked list resembles a normal list in essence (in being a linear //
   collection of data), all of the elements of a linked list are scattered //
@@ -11,7 +11,7 @@
   we need to create a class for it. In a linkedin list, we should be able to append,//
   prepend, and insert at any given index. As well as delete any given node.
   In total we will need to create 5 methods: a constructor, append, prepend, insert, and delete.
-  The 1st four methods will always create a Node (a container for our data and the pointer for the next element). 
+  The 1st four methods will always create a Node (a container for our data and the pointer for the next element).
   The best practice is to create a separate class for node creation that we will refer to it in //
   each method instead of duplicating boilerplate.
 """
@@ -20,7 +20,6 @@
 class Node:
     def __init__(self, value):
         self.value = value
-        # for now our Node has no next, but this value will be overrided during Node creation.
         self.next = None
 
 
@@ -57,8 +56,7 @@ class LinkedList:
         current_node = self.head
         previous_node = None
         while (current_node != tail):
-            current_node = current_node.next
-            previous_node = current_node
+            current_node, previous_node = current_node.next, current_node
 
         tail = previous_node
         previous_node.next = None
@@ -72,16 +70,55 @@ class LinkedList:
         else:
             node_to_prepend.next = head
             head = node_to_prepend
-    # def insert(self, index, value):
-    # def delete(self, index):
+        self.length += 1
+        return True
+
+    def insert(self, value, index):
+        # Note that this method doesn't insert a node in the last position, use append for this usecase
+        node_to_insert = Node(value)
+        i = 1
+        current_node = self.head.next
+        prev_node = self.head
+
+        while (i < self.length):
+            if index >= self.length:
+                raise IndexError("Index out of range")
+            if index == 0:
+                node_to_insert.next = self.head
+                self.head = node_to_insert
+                self.length += 1
+                return True
+
+            if i == index:
+                prev_node.next = node_to_insert
+                node_to_insert.next = current_node
+                self.length += 1
+                return True
+            temp = current_node
+            current_node = current_node.next
+            prev_node = temp
+            i += 1
 
 
 # Sandbox
-
 myLinkedList = LinkedList(1)
+
+# Test append
 myLinkedList.append(2)
 myLinkedList.append(3)
+myLinkedList.append(4)
+myLinkedList.append(5)
+myLinkedList.append(6)
 
-# myLinkedList.print_list()
+# Test insert
+myLinkedList.insert(55, 5)
 
-print(myLinkedList.pop().value)
+# Test delete
+
+# myLinkedList.delete(1)
+# Test pop
+# print(myLinkedList.pop().value)
+
+# Test print
+myLinkedList.print_list()
+# print(myLinkedList.length)
